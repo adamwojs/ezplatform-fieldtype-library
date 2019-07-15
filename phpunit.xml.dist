@@ -1,0 +1,17 @@
+<phpunit
+        backupGlobals="false"
+        backupStaticAttributes="false"
+        bootstrap="vendor/autoload.php"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        colors="true">
+    <testsuites>
+        <testsuite name="AdamWojs\EzPlatformFieldTypeLibraryBundle">
+            <directory>tests/bundle</directory>
+        </testsuite>
+        <testsuite name="AdamWojs\EzPlatformFieldTypeLibrary">
+            <directory>tests/lib</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
