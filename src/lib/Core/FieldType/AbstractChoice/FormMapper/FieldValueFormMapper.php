@@ -23,11 +23,12 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data): void
     {
-        $fieldDefinition = $data->fieldDefinition;
+        $definition = $data->fieldDefinition;
 
         $fieldForm->add('value', ChoiceValueType::class, [
-            'required' => $fieldDefinition->isRequired,
-            'label' => $fieldDefinition->getName(),
+            'required' => $definition->isRequired,
+            'label' => $definition->getName(),
+            'multiple' => $definition->fieldSettings['isMultiple'],
             'choice_loader' => new CallbackChoiceLoader(function () {
                 return array_flip($this->choiceProvider->getChoices());
             }),

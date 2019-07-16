@@ -16,24 +16,36 @@ final class ChoiceConverter implements Converter
 
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue): void
     {
-        $storageFieldValue->dataText = implode(self::CHOICE_DELIMITER, $value->data);
+        if (!empty($value->data) && is_array($value->data)) {
+            $storageFieldValue->dataText = implode(self::CHOICE_DELIMITER, $value->data);
+        }
+
         $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue): void
     {
-        $fieldValue->data = explode(self::CHOICE_DELIMITER, $value->dataText);
+        if (!empty($value->dataText)) {
+            $fieldValue->data = explode(self::CHOICE_DELIMITER, $value->dataText);
+        }
+
         $fieldValue->sortKey = $value->sortKeyString;
     }
 
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef): void
     {
-        // TODO: Implement toStorageFieldDefinition() method
+        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+
+        if (isset($fieldSettings['isMultiple'])) {
+            $storageDef->dataInt1 = (int)$fieldSettings['isMultiple'];
+        }
     }
 
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef): void
     {
-        // TODO: Implement toFieldDefinition() method
+        $fieldDef->fieldTypeConstraints->fieldSettings = [
+            'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
+        ];
     }
 
     public function getIndexColumn(): string
