@@ -18,7 +18,7 @@ final class Value extends BaseValue
 
     public function hasSelection(): bool
     {
-        return empty($this->selection);
+        return !empty($this->selection);
     }
 
     public function getSelection(): array
@@ -28,11 +28,11 @@ final class Value extends BaseValue
 
     public function getFirstSelection()
     {
-        return $this->selection[0];
+        return reset($this->selection);
     }
 
     public function __toString(): string
     {
-        return implode(',', $this->selection);
+        return implode(', ', $this->selection);
     }
 }
