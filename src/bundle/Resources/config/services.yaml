@@ -26,6 +26,11 @@ services:
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlanguage }
             - { name: ezplatform.field_type.legacy_storage.converter, alias: eztimezone }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\SearchField:
+        tags:
+            - { name: ezplatform.field_type.indexable, alias: ezlanguage }
+            - { name: ezplatform.field_type.indexable, alias: eztimezone }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.language:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
         arguments:
