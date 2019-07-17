@@ -65,6 +65,48 @@ abstract class Type extends FieldType
         }, $value->getSelection());
     }
 
+    /**
+     * @param \AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\Value $value
+     *
+     * @return array
+     */
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $value): array
+    {
+        $validationErrors = [];
+
+        if ($this->isEmptyValue($value)) {
+            return $validationErrors;
+        }
+
+        $fieldSettings = $fieldDefinition->getFieldSettings();
+
+        $isSingleChoiceFieldType = !isset($fieldSettings['isMultiple']) || $fieldSettings['isMultiple'] === false;
+        if ($isSingleChoiceFieldType && count($value->getSelection()) > 1) {
+            $validationErrors[] = new ValidationError(
+                'Field definition does not allow multiple options to be selected.',
+                null,
+                [],
+                'selection'
+            );
+        }
+
+        $availableChoices = $this->choiceProvider->getAllChoices();
+        foreach ($value->getSelection() as $index => $choice) {
+            if (!in_array($choice, $availableChoices)) {
+                $validationErrors[] = new ValidationError(
+                    'Choice with index %index% does not exist in the field definition.',
+                    null,
+                    [
+                        '%index%' => $index,
+                    ],
+                    'selection'
+                );
+            }
+        }
+
+        return $validationErrors;
+    }
+
     public function validateFieldSettings($fieldSettings): array
     {
         $validationErrors = [];
