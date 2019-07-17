@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper;
 
 use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\Choice\ChoiceProvider;
-use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\ChoiceValueType;
+use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\ChoiceFieldType;
 use EzSystems\RepositoryForms\Data\Content\FieldData;
 use EzSystems\RepositoryForms\FieldType\FieldValueFormMapperInterface;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\FormInterface;
 
 final class FieldValueFormMapper implements FieldValueFormMapperInterface
@@ -25,13 +24,11 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
     {
         $definition = $data->fieldDefinition;
 
-        $fieldForm->add('value', ChoiceValueType::class, [
+        $fieldForm->add('value', ChoiceFieldType::class, [
             'required' => $definition->isRequired,
             'label' => $definition->getName(),
             'multiple' => $definition->fieldSettings['isMultiple'],
-            'choice_loader' => new CallbackChoiceLoader(function () {
-                return array_flip($this->choiceProvider->getChoices());
-            }),
+            'choice_provider' => $this->choiceProvider,
         ]);
     }
 }

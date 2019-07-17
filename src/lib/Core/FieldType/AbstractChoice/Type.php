@@ -47,15 +47,22 @@ abstract class Type extends FieldType
     public function fromHash($hash): Value
     {
         if ($hash !== null) {
-            return new Value($hash);
+            return new Value($this->choiceProvider->getChoicesForValues($hash));
         }
 
         return $this->getEmptyValue();
     }
 
+    /**
+     * @param \AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\Value $value
+     *
+     * @return array
+     */
     public function toHash(SPIValue $value): array
     {
-        return $value->getSelection();
+        return array_map(function ($choice) {
+            return $this->choiceProvider->getValueForChoice($choice);
+        }, $value->getSelection());
     }
 
     public function validateFieldSettings($fieldSettings): array
