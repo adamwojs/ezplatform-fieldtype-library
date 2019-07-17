@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice;
 
-use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\Choice\ChoiceProvider;
+use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceCriteria;
+use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldType;
@@ -21,7 +22,7 @@ abstract class Type extends FieldType
         ],
     ];
 
-    /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\Choice\ChoiceProvider */
+    /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider */
     private $choiceProvider;
 
     public function __construct(ChoiceProvider $choiceProvider)
@@ -47,7 +48,7 @@ abstract class Type extends FieldType
     public function fromHash($hash): Value
     {
         if ($hash !== null) {
-            return new Value($this->choiceProvider->getChoicesForValues($hash));
+            return new Value($this->choiceProvider->getChoices(new ChoiceCriteria($hash)));
         }
 
         return $this->getEmptyValue();
@@ -90,7 +91,7 @@ abstract class Type extends FieldType
             );
         }
 
-        $availableChoices = $this->choiceProvider->getAllChoices();
+        $availableChoices = $this->choiceProvider->getChoices(new ChoiceCriteria());
         foreach ($value->getSelection() as $index => $choice) {
             if (!in_array($choice, $availableChoices)) {
                 $validationErrors[] = new ValidationError(

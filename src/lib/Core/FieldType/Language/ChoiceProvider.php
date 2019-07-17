@@ -4,26 +4,21 @@ declare(strict_types=1);
 
 namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language;
 
-use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\Choice\ChoiceProvider as ChoiceProviderInterface;
+use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceCriteria;
+use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider as ChoiceProviderInterface;
 use Symfony\Component\Intl\Languages;
 
 final class ChoiceProvider implements ChoiceProviderInterface
 {
-    public function getAllChoices(): array
+    public function getChoices(ChoiceCriteria $criteria): array
     {
         $choices = [];
-        foreach (Languages::getNames() as $code => $name) {
-            $choices[] = new Choice($code, $name);
-        }
+        foreach (Languages::getNames() as $value => $label) {
+            if ($criteria->getValues() !== null && !in_array($value, $criteria->getValues())) {
+                continue;
+            }
 
-        return $choices;
-    }
-
-    public function getChoicesForValues(iterable $values): array
-    {
-        $choices = [];
-        foreach ($values as $value) {
-            $choices[] = new Choice($value, Languages::getName($value));
+            $choices[] = new Choice($value, $label);
         }
 
         return $choices;

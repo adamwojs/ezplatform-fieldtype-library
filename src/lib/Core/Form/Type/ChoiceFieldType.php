@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type;
 
+use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceCriteria;
 use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\DataTransformer\ChoiceFieldTypeTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -14,13 +15,13 @@ final class ChoiceFieldType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\Choice\ChoiceProvider $choiceProvider */
+        /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider $choiceProvider */
         $choiceProvider = $options['choice_provider'];
 
         $builder->add('selection', ChoiceType::class, [
             'label' => false,
             'multiple' => $options['multiple'],
-            'choices' => $choiceProvider->getAllChoices(),
+            'choices' => $choiceProvider->getChoices(new ChoiceCriteria()),
             'choice_label' => function ($choice) use ($choiceProvider) {
                 return $choiceProvider->getLabelForChoice($choice);
             },
