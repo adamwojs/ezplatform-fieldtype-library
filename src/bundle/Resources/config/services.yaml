@@ -5,6 +5,7 @@ services:
         public: false
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider: ~
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider: ~
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\Type:
         public: true
@@ -13,17 +14,34 @@ services:
         tags:
             - { name: ezplatform.field_type, alias: ezlanguage }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\Type:
+        public: true
+        arguments:
+            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider'
+        tags:
+            - { name: ezplatform.field_type, alias: eztimezone }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter:
         tags:
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlanguage }
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: eztimezone }
 
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper:
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.language:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
         arguments:
             $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider'
         tags:
             - { name: ezplatform.field_type.form_mapper.value, fieldType: ezlanguage }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.timezone:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
+        arguments:
+            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider'
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: eztimezone }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper:
         tags:
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlanguage }
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: eztimezone }
 

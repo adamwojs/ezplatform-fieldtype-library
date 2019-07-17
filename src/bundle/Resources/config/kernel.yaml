@@ -2,5 +2,7 @@ system:
     default:
         field_templates:
             - { template: '@ezdesign/fieldtype/language_view.html.twig', priority: 1 }
+            - { template: '@ezdesign/fieldtype/timezone_view.html.twig', priority: 1 }
         fielddefinition_edit_templates:
             - { template: "@ezdesign/fieldtype/language_definition_edit.html.twig", priority: 1 }
+            - { template: "@ezdesign/fieldtype/timezone_definition_edit.html.twig", priority: 1 }
