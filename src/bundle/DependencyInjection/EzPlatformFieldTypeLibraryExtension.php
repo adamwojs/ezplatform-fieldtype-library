@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace AdamWojs\EzPlatformFieldTypeLibraryBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Yaml\Yaml;
 
-final class EzPlatformFieldTypeLibraryExtension extends Extension
+final class EzPlatformFieldTypeLibraryExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -19,5 +22,21 @@ final class EzPlatformFieldTypeLibraryExtension extends Extension
         );
 
         $loader->load('services.yaml');
+    }
+
+    public function prepend(ContainerBuilder $container): void
+    {
+        $this->prependKernelSettings($container);
+    }
+
+    private function prependKernelSettings(ContainerBuilder $container): void
+    {
+        $configFile = __DIR__ . '/../Resources/config/kernel.yaml';
+
+        $container->prependExtensionConfig(
+            'ezpublish',
+            Yaml::parse(file_get_contents($configFile))
+        );
+        $container->addResource(new FileResource($configFile));
     }
 }

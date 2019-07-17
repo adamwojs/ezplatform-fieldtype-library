@@ -1,0 +1,5 @@
+{% block ezlanguage_field %}
+{% spaceless %}
+    {{ field.value.getSelection()|map((choice) => choice.getName())|join(', ') }}
+{% endspaceless %}
+{% endblock %}

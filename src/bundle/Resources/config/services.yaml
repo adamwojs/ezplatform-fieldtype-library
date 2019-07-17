@@ -4,3 +4,26 @@ services:
         autoconfigure: true
         public: false
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider: ~
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\Type:
+        public: true
+        arguments:
+            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider'
+        tags:
+            - { name: ezplatform.field_type, alias: ezlanguage }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter:
+        tags:
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlanguage }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper:
+        arguments:
+            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider'
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezlanguage }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper:
+        tags:
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlanguage }
+
