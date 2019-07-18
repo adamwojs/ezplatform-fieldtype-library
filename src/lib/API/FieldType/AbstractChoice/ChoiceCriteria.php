@@ -18,4 +18,9 @@ final class ChoiceCriteria
     {
         return $this->values;
     }
+
+    public function hasValues(): bool
+    {
+        return !empty($this->values);
+    }
 }

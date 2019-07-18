@@ -4,8 +4,15 @@ services:
         autoconfigure: true
         public: false
 
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider: ~
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider: ~
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProviderFactory: ~
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider:
+        factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProviderFactory', 'create']
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProviderFactory: ~
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider:
+        factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProviderFactory', 'create']
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\Type:
         public: true
