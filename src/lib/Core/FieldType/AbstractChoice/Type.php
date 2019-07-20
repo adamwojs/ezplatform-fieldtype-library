@@ -143,6 +143,11 @@ abstract class Type extends FieldType
         return $validationErrors;
     }
 
+    public function isSearchable(): bool
+    {
+        return true;
+    }
+
     protected function createValueFromInput($inputValue)
     {
         return $inputValue;
