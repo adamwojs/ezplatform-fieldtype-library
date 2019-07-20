@@ -1,0 +1,5 @@
+{% block ezcurrency_field %}
+{% spaceless %}
+    {{ field.value.getSelection()|map((choice) => choice.getLabel())|join(', ') }}
+{% endspaceless %}
+{% endblock %}

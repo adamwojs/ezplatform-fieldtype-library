@@ -14,6 +14,11 @@ services:
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider:
         factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProviderFactory', 'create']
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProviderFactory: ~
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProvider:
+        factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProviderFactory', 'create']
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\Type:
         public: true
         arguments:
@@ -28,15 +33,24 @@ services:
         tags:
             - { name: ezplatform.field_type, alias: eztimezone }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\Type:
+        public: true
+        arguments:
+            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProvider'
+        tags:
+            - { name: ezplatform.field_type, alias: ezcurrency }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter:
         tags:
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlanguage }
             - { name: ezplatform.field_type.legacy_storage.converter, alias: eztimezone }
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezcurrency }
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\SearchField:
         tags:
             - { name: ezplatform.field_type.indexable, alias: ezlanguage }
             - { name: ezplatform.field_type.indexable, alias: eztimezone }
+            - { name: ezplatform.field_type.indexable, alias: ezcurrency }
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.language:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
@@ -52,8 +66,16 @@ services:
         tags:
             - { name: ezplatform.field_type.form_mapper.value, fieldType: eztimezone }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.currency:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
+        arguments:
+            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProvider'
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezcurrency }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper:
         tags:
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlanguage }
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: eztimezone }
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezcurrency }
 

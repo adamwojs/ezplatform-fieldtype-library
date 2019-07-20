@@ -1,0 +1,5 @@
+{% block ezcurrency_field_definition_edit %}
+    <div class="ezcurrency-settings is-multiple{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_row(form.isMultiple, {'label_attr': {'class': 'checkbox-inline ez-label'}}) -}}
+    </div>
+{% endblock %}
