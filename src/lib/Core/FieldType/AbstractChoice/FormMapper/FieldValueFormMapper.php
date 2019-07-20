@@ -8,6 +8,7 @@ use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvi
 use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\ChoiceFieldType;
 use EzSystems\RepositoryForms\Data\Content\FieldData;
 use EzSystems\RepositoryForms\FieldType\FieldValueFormMapperInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormInterface;
 
 final class FieldValueFormMapper implements FieldValueFormMapperInterface
@@ -15,9 +16,13 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
     /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider */
     private $choiceProvider;
 
-    public function __construct(ChoiceProvider $choiceProvider)
+    /** @var string|null */
+    private $choiceWidget;
+
+    public function __construct(ChoiceProvider $choiceProvider, ?string $choiceWidget = null)
     {
         $this->choiceProvider = $choiceProvider;
+        $this->choiceWidget = $choiceWidget ?? ChoiceType::class;
     }
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data): void
@@ -29,6 +34,7 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
             'label' => $definition->getName(),
             'multiple' => $definition->fieldSettings['isMultiple'],
             'choice_provider' => $this->choiceProvider,
+            'choice_widget' => $this->choiceWidget,
         ]);
     }
 }

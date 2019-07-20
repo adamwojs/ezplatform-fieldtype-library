@@ -56,6 +56,7 @@ services:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
         arguments:
             $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider'
+            $choiceWidget: '\Symfony\Component\Form\Extension\Core\Type\LanguageType'
         tags:
             - { name: ezplatform.field_type.form_mapper.value, fieldType: ezlanguage }
 
@@ -63,6 +64,7 @@ services:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
         arguments:
             $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider'
+            $choiceWidget: '\Symfony\Component\Form\Extension\Core\Type\TimezoneType'
         tags:
             - { name: ezplatform.field_type.form_mapper.value, fieldType: eztimezone }
 
@@ -70,6 +72,7 @@ services:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
         arguments:
             $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProvider'
+            $choiceWidget: '\Symfony\Component\Form\Extension\Core\Type\CurrencyType'
         tags:
             - { name: ezplatform.field_type.form_mapper.value, fieldType: ezcurrency }
 
