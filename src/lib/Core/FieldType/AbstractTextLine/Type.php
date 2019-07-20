@@ -80,7 +80,7 @@ abstract class Type extends FieldType
             return $validationErrors;
         }
 
-        if (!$this->format->validate($fieldValue->getText())) {
+        if (!$this->format->validate($fieldDefinition, $fieldValue->getText())) {
             $validationErrors[] = new ValidationError(
                 "The string doesn't match specified format.",
                 null,
