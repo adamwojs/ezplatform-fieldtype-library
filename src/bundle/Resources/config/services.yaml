@@ -19,6 +19,11 @@ services:
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProvider:
         factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProviderFactory', 'create']
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProviderFactory: ~
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProvider:
+        factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProviderFactory', 'create']
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\Type:
         public: true
         arguments:
@@ -40,17 +45,26 @@ services:
         tags:
             - { name: ezplatform.field_type, alias: ezcurrency }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\Type:
+        public: true
+        arguments:
+            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProvider'
+        tags:
+            - { name: ezplatform.field_type, alias: ezlocale }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter:
         tags:
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlanguage }
             - { name: ezplatform.field_type.legacy_storage.converter, alias: eztimezone }
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezcurrency }
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlocale }
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\SearchField:
         tags:
             - { name: ezplatform.field_type.indexable, alias: ezlanguage }
             - { name: ezplatform.field_type.indexable, alias: eztimezone }
             - { name: ezplatform.field_type.indexable, alias: ezcurrency }
+            - { name: ezplatform.field_type.indexable, alias: ezlocale }
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.language:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
@@ -76,9 +90,17 @@ services:
         tags:
             - { name: ezplatform.field_type.form_mapper.value, fieldType: ezcurrency }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.locale:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
+        arguments:
+            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProvider'
+            $choiceWidget: '\Symfony\Component\Form\Extension\Core\Type\LocaleType'
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezlocale }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper:
         tags:
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlanguage }
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: eztimezone }
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezcurrency }
-
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlocale }
