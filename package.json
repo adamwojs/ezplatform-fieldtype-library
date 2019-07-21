@@ -1,0 +1,12 @@
+{
+  "name": "ezplatform-fieldtype-library",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/adamwojs/ezplatform-fieldtype-library.git",
+  "author": "Adam Wójs <adam@wojs.pl>",
+  "license": "MIT",
+  "dependencies": {
+    "select2": "^4.0.8",
+    "select2-bootstrap4-theme": "^1.0.0"
+  }
+}
