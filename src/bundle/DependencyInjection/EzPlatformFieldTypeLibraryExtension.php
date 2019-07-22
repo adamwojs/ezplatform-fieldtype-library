@@ -26,17 +26,11 @@ final class EzPlatformFieldTypeLibraryExtension extends Extension implements Pre
 
     public function prepend(ContainerBuilder $container): void
     {
-        $this->prependKernelSettings($container);
-    }
+        $configFile = __DIR__ . '/../Resources/config/prepend.yaml';
 
-    private function prependKernelSettings(ContainerBuilder $container): void
-    {
-        $configFile = __DIR__ . '/../Resources/config/kernel.yaml';
-
-        $container->prependExtensionConfig(
-            'ezpublish',
-            Yaml::parse(file_get_contents($configFile))
-        );
         $container->addResource(new FileResource($configFile));
+        foreach (Yaml::parseFile($configFile) as $name => $config) {
+            $container->prependExtensionConfig($name, $config);
+        }
     }
 }

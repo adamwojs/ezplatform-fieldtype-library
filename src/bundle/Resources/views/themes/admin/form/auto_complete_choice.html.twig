@@ -1,0 +1,7 @@
+{% block auto_complete_choice_widget %}
+    {% set attr = attr|merge({
+        'data-auto-complete': 1
+    }) %}
+
+    {{ block('choice_widget') }}
+{% endblock %}

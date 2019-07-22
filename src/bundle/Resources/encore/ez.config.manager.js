@@ -6,6 +6,7 @@ module.exports = (eZConfig, eZConfigManager) => {
         entryName: 'ezplatform-admin-ui-content-edit-parts-js',
         newItems: [
             path.resolve(__dirname, '../public/vendors/select2/dist/js/select2.js'),
+            path.resolve(__dirname, '../public/js/admin.autocomplete.js'),
         ]
     });
 
