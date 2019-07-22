@@ -52,12 +52,21 @@ services:
         tags:
             - { name: ezplatform.field_type, alias: ezlocale }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\Type:
+        public: true
+        tags:
+            - { name: ezplatform.field_type, alias: ezcalcval }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter:
         tags:
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlanguage }
             - { name: ezplatform.field_type.legacy_storage.converter, alias: eztimezone }
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezcurrency }
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlocale }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\CalculatedValueConverter:
+        tags:
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezcalcval }
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\SearchField:
         tags:
@@ -94,9 +103,23 @@ services:
         tags:
             - { name: ezplatform.field_type.form_mapper.value, fieldType: ezlocale }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\FormMapper\FieldValueFormMapper:
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezcalcval }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper:
         tags:
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlanguage }
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: eztimezone }
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezcurrency }
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlocale }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\FormMapper\FieldDefinitionFormMapper:
+        tags:
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezcalcval }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\EventSubscriber\CalculatedValueSubscriber:
+        arguments:
+            $calculatedValueFieldType: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\Type'
+        tags:
+            - { name: kernel.event_subscriber }

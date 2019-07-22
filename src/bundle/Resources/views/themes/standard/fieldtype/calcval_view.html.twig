@@ -1,0 +1,5 @@
+{% block ezcalcval_field %}
+    {% if not ez_field_is_empty(content, field) %}
+        {{ field.value }}
+    {% endif %}
+{% endblock %}
