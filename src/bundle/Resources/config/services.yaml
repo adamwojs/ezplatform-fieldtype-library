@@ -128,3 +128,6 @@ services:
         public: true
         tags:
             - { name: doctrine.event_subscriber }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\MVC\Symfony\Templating\FallbackFieldBlockRenderer:
+        decorates: ezpublish.templating.field_block_renderer.twig
