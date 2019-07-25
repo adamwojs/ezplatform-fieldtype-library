@@ -24,6 +24,8 @@ services:
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProvider:
         factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProviderFactory', 'create']
 
+    AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\MaskedTextLineFormat: ~
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\Type:
         public: true
         arguments:
@@ -57,6 +59,13 @@ services:
         tags:
             - { name: ezplatform.field_type, alias: ezcalcval }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine\Type:
+        public: true
+        arguments:
+            $format: '@AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\MaskedTextLineFormat'
+        tags:
+            - { name: ezplatform.field_type, alias: ezmaskedtextline }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter:
         tags:
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlanguage }
@@ -68,12 +77,21 @@ services:
         tags:
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezcalcval }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\MaskedTextLineConverter:
+        tags:
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezmaskedtextline }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\SearchField:
         tags:
             - { name: ezplatform.field_type.indexable, alias: ezlanguage }
             - { name: ezplatform.field_type.indexable, alias: eztimezone }
             - { name: ezplatform.field_type.indexable, alias: ezcurrency }
             - { name: ezplatform.field_type.indexable, alias: ezlocale }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine\SearchField:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractTextLine\SearchField
+        tags:
+            - { name: ezplatform.field_type.indexable, alias: ezmaskedtextline }
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.language:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
@@ -107,6 +125,12 @@ services:
         tags:
             - { name: ezplatform.field_type.form_mapper.value, fieldType: ezcalcval }
 
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine\FormMapper\FieldValueFormMapper:
+        arguments:
+            $format: '@AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\MaskedTextLineFormat'
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezmaskedtextline }
+
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper:
         tags:
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlanguage }
@@ -117,6 +141,10 @@ services:
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\FormMapper\FieldDefinitionFormMapper:
         tags:
             - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezcalcval }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine\FormMapper\FieldDefinitionFormMapper:
+        tags:
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezmaskedtextline }
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\EventSubscriber\CalculatedValueSubscriber:
         arguments:

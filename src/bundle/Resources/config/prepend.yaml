@@ -17,3 +17,4 @@ ezpublish:
                 - { template: "@ezdesign/fieldtype/timezone_definition_edit.html.twig", priority: 1 }
                 - { template: "@ezdesign/fieldtype/locale_definition_edit.html.twig", priority: 1 }
                 - { template: "@ezdesign/fieldtype/calcval_definition_edit.html.twig", priority: 1 }
+                - { template: "@ezdesign/fieldtype/maskedtextline_definition_edit.html.twig", priority: 1 }

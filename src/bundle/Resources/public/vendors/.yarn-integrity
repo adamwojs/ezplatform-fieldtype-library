@@ -6,10 +6,12 @@
   "flags": [],
   "linkedModules": [],
   "topLevelPatterns": [
+    "jquery-mask-plugin@^1.14.15",
     "select2-bootstrap4-theme@^1.0.0",
     "select2@^4.0.8"
   ],
   "lockfileEntries": {
+    "jquery-mask-plugin@^1.14.15": "https://registry.yarnpkg.com/jquery-mask-plugin/-/jquery-mask-plugin-1.14.15.tgz#9daabb41024383cba2a793bacfa46ef8f87273a5",
     "select2-bootstrap4-theme@^1.0.0": "https://registry.yarnpkg.com/select2-bootstrap4-theme/-/select2-bootstrap4-theme-1.0.0.tgz#d637ff18e7fdade8d723ad4c567ef2ba48b73094",
     "select2@^4.0.8": "https://registry.yarnpkg.com/select2/-/select2-4.0.8.tgz#3773bec1e5b96620ed98ca5ded53c0da47e7753f"
   },

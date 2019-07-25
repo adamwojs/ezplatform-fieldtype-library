@@ -1,0 +1,59 @@
+{% block ezmaskedtextline_field_definition_edit %}
+    <div class="ezmaskedtextline-settings">
+        {{- form_row(form.mask, {'label_attr': {'class': 'ez-label'}}) -}}
+
+        <details>
+            <summary>Supported placeholders</summary>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Masking element</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>0</code></td>
+                    <td>Required digit (0-9)</td>
+                </tr>
+                <tr>
+                    <td><code>9</code></td>
+                    <td>Optional digit (0-9)</td>
+                </tr>
+                <tr>
+                    <td><code>L</code></td>
+                    <td>Required letter</td>
+                </tr>
+                <tr>
+                    <td><code>?</code></td>
+                    <td>Optional letter</td>
+                </tr>
+                <tr>
+                    <td><code>A</code></td>
+                    <td>Required letter or digit</td>
+                </tr>
+                <tr>
+                    <td><code>a</code></td>
+                    <td>Optional letter or digit</td>
+                </tr>
+                <tr>
+                    <td><code>C</code></td>
+                    <td>Required character (any non-control character)</td>
+                </tr>
+                <tr>
+                    <td><code>c</code></td>
+                    <td>Optional character (any non-control character)</td>
+                </tr>
+                <tr>
+                    <td><code>H</code></td>
+                    <td>Required hexadecimal digit</td>
+                </tr>
+                <tr>
+                    <td><code>h</code></td>
+                    <td>Optional hexadecimal digit</td>
+                </tr>
+                </tbody>
+            </table>
+        </details>
+    </div>
+{% endblock %}
