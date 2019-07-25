@@ -35,9 +35,23 @@ abstract class Type extends FieldType
         return $this->choiceProvider;
     }
 
+    /**
+     * @param \AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\Value $value
+     *
+     * @return string
+     */
     public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
-        return '';
+        if (!$value->hasSelection()) {
+            return '';
+        }
+
+        $labels = [];
+        foreach ($value->getSelection() as $choice) {
+            $labels[] = $this->choiceProvider->getLabelForChoice($choice);
+        }
+
+        return implode(' ', $labels);
     }
 
     public function getEmptyValue(): Value
