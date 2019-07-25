@@ -131,3 +131,11 @@ services:
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\MVC\Symfony\Templating\FallbackFieldBlockRenderer:
         decorates: ezpublish.templating.field_block_renderer.twig
+
+##  Experimental
+
+#   AdamWojs\EzPlatformFieldTypeLibrary\Core\MVC\Symfony\Templating\FieldRenderExtension:
+#       arguments:
+#           - "@ezpublish.api.service.field_type"
+#       tags:
+#           - { name: twig.extension }
