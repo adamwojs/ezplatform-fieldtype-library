@@ -1,0 +1,42 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    ezplatform.field_type.eztimezone.choice_provider.factory:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProviderFactory
+
+    ezplatform.field_type.eztimezone.choice_provider:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider
+        factory: ['@ezplatform.field_type.eztimezone.choice_provider.factory', 'create']
+
+    ezplatform.field_type.eztimezone:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\Type
+        public: true
+        arguments:
+            $choiceProvider: '@ezplatform.field_type.eztimezone.choice_provider'
+        tags:
+            - { name: ezplatform.field_type, alias: eztimezone }
+
+    ezplatform.field_type.eztimezone.converter:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter
+        tags:
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: eztimezone }
+
+    ezplatform.field_type.eztimezone.indexable:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\SearchField
+        tags:
+            - { name: ezplatform.field_type.indexable, alias: eztimezone }
+
+    ezplatform.field_type.eztimezone.form_mapper.value:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
+        arguments:
+            $choiceProvider: '@ezplatform.field_type.eztimezone.choice_provider'
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: eztimezone }
+
+    ezplatform.field_type.eztimezone.form_mapper.definition:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper
+        tags:
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: eztimezone }

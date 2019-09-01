@@ -1,161 +1,17 @@
+imports:
+    - { resource: fieldtype/ezcalcval.yaml }
+    - { resource: fieldtype/ezcurrency.yaml }
+    - { resource: fieldtype/ezentity.yaml }
+    - { resource: fieldtype/ezlanguage.yaml }
+    - { resource: fieldtype/ezlocale.yaml }
+    - { resource: fieldtype/ezmaskedtextline.yaml }
+    - { resource: fieldtype/eztimezone.yaml }
+
 services:
     _defaults:
         autowire: true
         autoconfigure: true
         public: false
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProviderFactory: ~
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider:
-        factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProviderFactory', 'create']
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProviderFactory: ~
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider:
-        factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProviderFactory', 'create']
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProviderFactory: ~
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProvider:
-        factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProviderFactory', 'create']
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProviderFactory: ~
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProvider:
-        factory: ['@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProviderFactory', 'create']
-
-    AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\MaskedTextLineFormat: ~
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\Type:
-        public: true
-        arguments:
-            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider'
-        tags:
-            - { name: ezplatform.field_type, alias: ezlanguage }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\Type:
-        public: true
-        arguments:
-            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider'
-        tags:
-            - { name: ezplatform.field_type, alias: eztimezone }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\Type:
-        public: true
-        arguments:
-            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProvider'
-        tags:
-            - { name: ezplatform.field_type, alias: ezcurrency }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\Type:
-        public: true
-        arguments:
-            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProvider'
-        tags:
-            - { name: ezplatform.field_type, alias: ezlocale }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\Type:
-        public: true
-        tags:
-            - { name: ezplatform.field_type, alias: ezcalcval }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine\Type:
-        public: true
-        arguments:
-            $format: '@AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\MaskedTextLineFormat'
-        tags:
-            - { name: ezplatform.field_type, alias: ezmaskedtextline }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter:
-        tags:
-            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlanguage }
-            - { name: ezplatform.field_type.legacy_storage.converter, alias: eztimezone }
-            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezcurrency }
-            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlocale }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\CalculatedValueConverter:
-        tags:
-            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezcalcval }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\MaskedTextLineConverter:
-        tags:
-            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezmaskedtextline }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\SearchField:
-        tags:
-            - { name: ezplatform.field_type.indexable, alias: ezlanguage }
-            - { name: ezplatform.field_type.indexable, alias: eztimezone }
-            - { name: ezplatform.field_type.indexable, alias: ezcurrency }
-            - { name: ezplatform.field_type.indexable, alias: ezlocale }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine\SearchField:
-        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractTextLine\SearchField
-        tags:
-            - { name: ezplatform.field_type.indexable, alias: ezmaskedtextline }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.language:
-        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
-        arguments:
-            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProvider'
-        tags:
-            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezlanguage }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.timezone:
-        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
-        arguments:
-            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\ChoiceProvider'
-        tags:
-            - { name: ezplatform.field_type.form_mapper.value, fieldType: eztimezone }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.currency:
-        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
-        arguments:
-            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProvider'
-        tags:
-            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezcurrency }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper.locale:
-        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
-        arguments:
-            $choiceProvider: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\ChoiceProvider'
-        tags:
-            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezlocale }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\FormMapper\FieldValueFormMapper:
-        tags:
-            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezcalcval }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine\FormMapper\FieldValueFormMapper:
-        arguments:
-            $format: '@AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\MaskedTextLineFormat'
-        tags:
-            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezmaskedtextline }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper:
-        tags:
-            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlanguage }
-            - { name: ezplatform.field_type.form_mapper.definition, fieldType: eztimezone }
-            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezcurrency }
-            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlocale }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\FormMapper\FieldDefinitionFormMapper:
-        tags:
-            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezcalcval }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine\FormMapper\FieldDefinitionFormMapper:
-        tags:
-            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezmaskedtextline }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\EventSubscriber\CalculatedValueSubscriber:
-        arguments:
-            $calculatedValueFieldType: '@AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\Type'
-        tags:
-            - { name: kernel.event_subscriber }
-
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractEntity\Doctrine\Behavior\AssociableWithContentSubscriber:
-        public: true
-        tags:
-            - { name: doctrine.event_subscriber }
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\MVC\Symfony\Templating\FallbackFieldBlockRenderer:
         decorates: ezpublish.templating.field_block_renderer.twig

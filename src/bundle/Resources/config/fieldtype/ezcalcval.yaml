@@ -1,0 +1,32 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    ezplatform.field_type.ezcalcval:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\Type
+        public: true
+        tags:
+            - { name: ezplatform.field_type, alias: ezcalcval }
+
+    ezplatform.field_type.ezcalcval.converter:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\CalculatedValueConverter
+        tags:
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezcalcval }
+
+    ezplatform.field_type.ezcalcval.form_mapper.value:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\FormMapper\FieldValueFormMapper
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezcalcval }
+
+    ezplatform.field_type.ezcalcval.form_mapper.definition:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\FormMapper\FieldDefinitionFormMapper
+        tags:
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezcalcval }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\EventSubscriber\CalculatedValueSubscriber:
+        arguments:
+            $calculatedValueFieldType: '@ezplatform.field_type.ezcalcval'
+        tags:
+            - { name: kernel.event_subscriber }

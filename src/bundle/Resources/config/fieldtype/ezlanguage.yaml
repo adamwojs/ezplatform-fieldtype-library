@@ -1,0 +1,42 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    ezplatform.field_type.ezlanguage.choice_provider.factory:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\ChoiceProviderFactory
+
+    ezplatform.field_type.ezlanguage.choice_provider:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider
+        factory: ['@ezplatform.field_type.ezlanguage.choice_provider.factory', 'create']
+
+    ezplatform.field_type.ezlanguage:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\Type
+        public: true
+        arguments:
+            $choiceProvider: '@ezplatform.field_type.ezlanguage.choice_provider'
+        tags:
+            - { name: ezplatform.field_type, alias: ezlanguage }
+
+    ezplatform.field_type.ezlanguage.converter:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter
+        tags:
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezlanguage }
+
+    ezplatform.field_type.ezlanguage.indexable:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\SearchField
+        tags:
+            - { name: ezplatform.field_type.indexable, alias: ezlanguage }
+
+    ezplatform.field_type.ezlanguage.form_mapper.value:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
+        arguments:
+            $choiceProvider: '@ezplatform.field_type.ezlanguage.choice_provider'
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezlanguage }
+
+    ezplatform.field_type.ezlanguage.form_mapper.definition:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper
+        tags:
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezlanguage }

@@ -1,0 +1,42 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    ezplatform.field_type.ezcurrency.choice_provider.factory:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\ChoiceProviderFactory
+
+    ezplatform.field_type.ezcurrency.choice_provider:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider
+        factory: ['@ezplatform.field_type.ezcurrency.choice_provider.factory', 'create']
+
+    ezplatform.field_type.ezcurrency:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Currency\Type
+        public: true
+        arguments:
+            $choiceProvider: '@ezplatform.field_type.ezcurrency.choice_provider'
+        tags:
+            - { name: ezplatform.field_type, alias: ezcurrency }
+
+    ezplatform.field_type.ezcurrency.converter:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter
+        tags:
+            - { name: ezplatform.field_type.legacy_storage.converter, alias: ezcurrency }
+
+    ezplatform.field_type.ezcurrency.indexable:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\SearchField
+        tags:
+            - { name: ezplatform.field_type.indexable, alias: ezcurrency }
+
+    ezplatform.field_type.ezcurrency.form_mapper.value:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldValueFormMapper
+        arguments:
+            $choiceProvider: '@ezplatform.field_type.ezcurrency.choice_provider'
+        tags:
+            - { name: ezplatform.field_type.form_mapper.value, fieldType: ezcurrency }
+
+    ezplatform.field_type.ezcurrency.form_mapper.definition:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper\FieldDefinitionFormMapper
+        tags:
+            - { name: ezplatform.field_type.form_mapper.definition, fieldType: ezcurrency }
