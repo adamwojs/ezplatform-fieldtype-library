@@ -14,11 +14,12 @@ services:
     ezplatform.field_type.ezmaskedtextline.format:
         class: AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\MaskedTextLineFormat
 
-    AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\MaskedTextLineConverter:
+    ezplatform.field_type.ezmaskedtextline.converter:
+        class: AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\MaskedTextLineConverter
         tags:
             - { name: ezplatform.field_type.legacy_storage.converter, alias: ezmaskedtextline }
 
-    ezplatform.field_type.ezmaskedtextline.converter:
+    ezplatform.field_type.ezmaskedtextline.indexable:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractTextLine\SearchField
         tags:
             - { name: ezplatform.field_type.indexable, alias: ezmaskedtextline }
