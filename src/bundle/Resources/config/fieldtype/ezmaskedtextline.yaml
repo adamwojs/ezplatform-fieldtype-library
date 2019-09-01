@@ -6,7 +6,6 @@ services:
 
     ezplatform.field_type.ezmaskedtextline:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine\Type
-        public: true
         arguments:
             $format: '@ezplatform.field_type.ezmaskedtextline.format'
         tags:

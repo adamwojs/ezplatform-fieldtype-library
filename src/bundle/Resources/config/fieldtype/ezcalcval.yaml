@@ -6,7 +6,6 @@ services:
 
     ezplatform.field_type.ezcalcval:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\Type
-        public: true
         tags:
             - { name: ezplatform.field_type, alias: ezcalcval }
 

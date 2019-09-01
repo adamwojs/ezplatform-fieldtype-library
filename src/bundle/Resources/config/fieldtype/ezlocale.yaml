@@ -13,7 +13,6 @@ services:
 
     ezplatform.field_type.ezlocale:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Locale\Type
-        public: true
         arguments:
             $choiceProvider: '@ezplatform.field_type.ezlocale.choice_provider'
         tags:

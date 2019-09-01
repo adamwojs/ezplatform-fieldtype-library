@@ -13,7 +13,6 @@ services:
 
     ezplatform.field_type.eztimezone:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Timezone\Type
-        public: true
         arguments:
             $choiceProvider: '@ezplatform.field_type.eztimezone.choice_provider'
         tags:

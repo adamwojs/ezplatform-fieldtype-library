@@ -13,7 +13,6 @@ services:
 
     ezplatform.field_type.ezlanguage:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\Language\Type
-        public: true
         arguments:
             $choiceProvider: '@ezplatform.field_type.ezlanguage.choice_provider'
         tags:

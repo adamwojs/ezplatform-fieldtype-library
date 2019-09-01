@@ -5,6 +5,5 @@ services:
         public: false
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractEntity\Doctrine\Behavior\AssociableWithContentSubscriber:
-        public: true
         tags:
             - { name: doctrine.event_subscriber }
