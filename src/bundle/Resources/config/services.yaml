@@ -15,3 +15,9 @@ services:
 
     AdamWojs\EzPlatformFieldTypeLibrary\Core\MVC\Symfony\Templating\FallbackFieldBlockRenderer:
         decorates: ezpublish.templating.field_block_renderer.twig
+
+    ### Maker
+
+    AdamWojs\EzPlatformFieldTypeLibraryBundle\Maker\MakeChoiceFieldType:
+        tags:
+            - { name: maker.command }
