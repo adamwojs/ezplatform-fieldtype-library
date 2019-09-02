@@ -25,3 +25,9 @@ services:
     AdamWojs\EzPlatformFieldTypeLibraryBundle\Maker\MakeTextLineFieldType:
         tags:
             - { name: maker.command }
+
+    AdamWojs\EzPlatformFieldTypeLibraryBundle\Maker\MakeEntityFieldType:
+        arguments:
+            $doctrineHelper: '@maker.doctrine_helper'
+        tags:
+            - { name: maker.command }
