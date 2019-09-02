@@ -5,47 +5,20 @@ declare(strict_types=1);
 namespace AdamWojs\EzPlatformFieldTypeLibraryBundle\Maker;
 
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
-use Symfony\Bundle\MakerBundle\DependencyBuilder;
-use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
-use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Question\Question;
 
-final class MakeChoiceFieldType extends AbstractMaker
+final class MakeChoiceFieldType extends AbstractFieldTypeMaker
 {
-    private const TEMPLATE_DIR = __DIR__ . '/../Resources/skeleton/choice-field-type/';
-
-    private const FIELD_TYPE_NAME = 'name';
-    private const FIELD_TYPE_IDENTIFIER = 'identifier';
     private const WITH_IN_MEMORY_CHOICE_PROVIDER = 'in-memory';
-
-    public static function getCommandName(): string
-    {
-        return 'make:ezplatform:choice-field-type';
-    }
 
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
-        $command->setDescription('Creates a new eZ Platform choice field type');
-
-        $command->addArgument(
-            self::FIELD_TYPE_NAME,
-            InputArgument::REQUIRED,
-            'field type name e.g. ColorChoice'
-        );
-
-        $command->addOption(
-            self::FIELD_TYPE_IDENTIFIER,
-            null,
-            InputArgument::OPTIONAL,
-            'field type identifier e.g. ezcolorchoice'
-        );
+        parent::configureCommand($command, $inputConfig);
 
         $command->addOption(
             self::WITH_IN_MEMORY_CHOICE_PROVIDER,
@@ -55,59 +28,26 @@ final class MakeChoiceFieldType extends AbstractMaker
         );
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
-    {
-        if (!$input->getArgument(self::FIELD_TYPE_NAME)) {
-            $argument = $command->getDefinition()->getArgument(self::FIELD_TYPE_NAME);
-
-            $question = new Question($argument->getDescription());
-            $question->setValidator(function (?string $value): string {
-                if (null === $value || '' === $value) {
-                    throw new RuntimeCommandException('This value cannot be blank.');
-                }
-
-                return $value;
-            });
-
-            $input->setArgument(self::FIELD_TYPE_NAME, $io->askQuestion($question));
-        }
-
-        if (!$input->getOption(self::FIELD_TYPE_IDENTIFIER)) {
-            $input->setOption(self::FIELD_TYPE_IDENTIFIER, strtolower($input->getArgument(self::FIELD_TYPE_NAME)));
-        }
-    }
-
-    public function configureDependencies(DependencyBuilder $dependencies): void
-    {
-        /* Nothing to configure */
-    }
-
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
-        $typeIdentifier = $input->getOption(self::FIELD_TYPE_IDENTIFIER);
-        $namespace = 'FieldType\\' . $input->getArgument(self::FIELD_TYPE_NAME) . '\\';
+        $fieldTypeInfo  = $this->getFieldTypeInfoFromInput($input);
+        $fieldTypeClass = $this->generateTypeClass($generator, $fieldTypeInfo);
 
-        $typeClass = $generator->createClassNameDetails('Type', $namespace);
-
-        $this->generateTypeClass($generator, $typeIdentifier, $typeClass);
         if ($input->getOption(self::WITH_IN_MEMORY_CHOICE_PROVIDER)) {
-            $choiceProviderFactoryClass = $generator->createClassNameDetails('ChoiceProviderFactory', $namespace);
+            $choiceProviderFactoryClass = $this->generateInMemoryChoiceProviderFactoryClass($generator, $fieldTypeInfo);
 
-            $this->generateInMemoryChoiceProviderFactoryClass($generator, $choiceProviderFactoryClass);
             $this->generateConfigForInMemoryChoiceProvider(
                 $generator,
-                $typeIdentifier,
-                $typeClass,
+                $fieldTypeInfo,
+                $fieldTypeClass,
                 $choiceProviderFactoryClass
             );
         } else {
-            $choiceProviderClass = $generator->createClassNameDetails('ChoiceProvider', $namespace);
-
-            $this->generateCustomChoiceProviderClass($generator, $choiceProviderClass);
+            $choiceProviderClass = $this->generateCustomChoiceProviderClass($generator, $fieldTypeInfo);
             $this->generateConfigForCustomChoiceProvider(
                 $generator,
-                $typeIdentifier,
-                $typeClass,
+                $fieldTypeInfo,
+                $fieldTypeClass,
                 $choiceProviderClass
             );
         }
@@ -117,73 +57,87 @@ final class MakeChoiceFieldType extends AbstractMaker
         $this->writeSuccessMessage($io);
     }
 
-    private function generateTypeClass(Generator $generator, string $identifier, ClassNameDetails $typeClass): void
+    private function generateTypeClass(Generator $generator, FieldTypeInfo $fieldTypeInfo): ClassNameDetails
     {
+        $class = $fieldTypeInfo->getClassNameDetails($generator);
+
         $generator->generateClass(
-            $typeClass->getFullName(),
-            self::TEMPLATE_DIR . 'class/Type.tpl.php',
+            $class->getFullName(),
+            $this->getTemplate('class/Type.tpl.php'),
             [
-                'identifier' => $identifier,
+                'identifier' => $fieldTypeInfo->getIdentifier(),
             ]
         );
+
+        return $class;
     }
 
     private function generateConfigForInMemoryChoiceProvider(
         Generator $generator,
-        string $identifier,
+        FieldTypeInfo $fieldTypeInfo,
         ClassNameDetails $typeClass,
         ClassNameDetails $choiceProviderFactoryClass
-    ): void
-    {
+    ): void {
         $generator->generateFile(
-            $this->getServicesConfigPath($generator, $identifier),
-            self::TEMPLATE_DIR . '/services/in_memory.tpl.php',
+            $fieldTypeInfo->getServicesPath($generator),
+            $this->getTemplate('services/in_memory.tpl.php'),
             [
-                'field_type_identifier' => $identifier,
-                'field_type_definition' => 'app.field_type.' . $identifier,
+                'field_type_identifier' => $fieldTypeInfo->getIdentifier(),
+                'field_type_definition' => $fieldTypeInfo->getServiceDefinitionId(),
                 'field_type_definition_class' => $typeClass->getFullName(),
                 'choice_provider_factory_class' => $choiceProviderFactoryClass->getFullName(),
             ]
         );
     }
 
-    private function generateInMemoryChoiceProviderFactoryClass(Generator $generator, ClassNameDetails $factoryClass): void
-    {
+    private function generateInMemoryChoiceProviderFactoryClass(
+        Generator $generator,
+        FieldTypeInfo $fieldTypeInfo
+    ): ClassNameDetails {
+        $class = $generator->createClassNameDetails('ChoiceProviderFactory', $fieldTypeInfo->getNamespace());
+
         $generator->generateClass(
-            $factoryClass->getFullName(),
-            self::TEMPLATE_DIR . 'class/ChoiceProviderFactory.tpl.php'
+            $class->getFullName(),
+            $this->getTemplate('class/ChoiceProviderFactory.tpl.php')
         );
+
+        return $class;
     }
 
-    private function generateCustomChoiceProviderClass(Generator $generator, ClassNameDetails $providerClass): void
-    {
+    private function generateCustomChoiceProviderClass(
+        Generator $generator,
+        FieldTypeInfo $fieldTypeInfo
+    ): ClassNameDetails {
+        $class = $generator->createClassNameDetails('ChoiceProvider', $fieldTypeInfo->getNamespace());
+
         $generator->generateClass(
-            $providerClass->getFullName(),
-            self::TEMPLATE_DIR . 'class/ChoiceProvider.tpl.php'
+            $class->getFullName(),
+            $this->getTemplate('class/ChoiceProvider.tpl.php')
         );
+
+        return $class;
     }
 
     private function generateConfigForCustomChoiceProvider(
         Generator $generator,
-        string $identifier,
+        FieldTypeInfo $fieldTypeInfo,
         ClassNameDetails $typeClass,
         ClassNameDetails $choiceProviderClass
-    ): void
-    {
+    ): void {
         $generator->generateFile(
-            $this->getServicesConfigPath($generator, $identifier),
-            self::TEMPLATE_DIR . '/config/services/custom.tpl.php',
+            $fieldTypeInfo->getServicesPath($generator),
+            $this->getTemplate('services/custom.tpl.php'),
             [
-                'field_type_identifier' => $identifier,
-                'field_type_definition' => 'app.field_type.' . $identifier,
+                'field_type_identifier' => $fieldTypeInfo->getIdentifier(),
+                'field_type_definition' => $fieldTypeInfo->getServiceDefinitionId(),
                 'field_type_definition_class' => $typeClass->getFullName(),
                 'choice_provider_class' => $choiceProviderClass->getFullName()
             ]
         );
     }
 
-    private function getServicesConfigPath(Generator $generator, string $identifier): string
+    protected static function getBaseFieldTypeName(): string
     {
-        return $generator->getRootDirectory() . '/config/services/fieldtype/' . $identifier . '.yaml';
+        return 'choice';
     }
 }

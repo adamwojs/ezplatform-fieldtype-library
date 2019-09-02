@@ -12,7 +12,7 @@ services:
             - { name: ezplatform.field_type, alias: <?= $field_type_identifier ?> }
 
     <?= $field_type_definition ?>.choice_provider:
-        class: <?= $choice_provider_class ?>
+        class: <?= $choice_provider_class . "\n" ?>
 
     <?= $field_type_definition ?>.converter:
         class: AdamWojs\EzPlatformFieldTypeLibrary\Core\Persistence\Legacy\Converter\ChoiceConverter
