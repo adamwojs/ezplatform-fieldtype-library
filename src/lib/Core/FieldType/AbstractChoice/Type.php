@@ -62,7 +62,7 @@ abstract class Type extends FieldType
     public function fromHash($hash): Value
     {
         if ($hash !== null) {
-            return new Value($this->choiceProvider->getChoices(new ChoiceCriteria($hash)));
+            return new Value($this->choiceProvider->getChoiceList(new ChoiceCriteria($hash))->toArray());
         }
 
         return $this->getEmptyValue();
@@ -105,7 +105,7 @@ abstract class Type extends FieldType
             );
         }
 
-        $availableChoices = $this->choiceProvider->getChoices(new ChoiceCriteria());
+        $availableChoices = $this->choiceProvider->getChoiceList(new ChoiceCriteria())->toArray();
         foreach ($value->getSelection() as $index => $choice) {
             if (!in_array($choice, $availableChoices)) {
                 $validationErrors[] = new ValidationError(

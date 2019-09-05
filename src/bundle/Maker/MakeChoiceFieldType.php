@@ -30,7 +30,7 @@ final class MakeChoiceFieldType extends AbstractFieldTypeMaker
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
-        $fieldTypeInfo  = $this->getFieldTypeInfoFromInput($input);
+        $fieldTypeInfo = $this->getFieldTypeInfoFromInput($input);
         $fieldTypeClass = $this->generateTypeClass($generator, $fieldTypeInfo);
 
         if ($input->getOption(self::WITH_IN_MEMORY_CHOICE_PROVIDER)) {
@@ -131,7 +131,7 @@ final class MakeChoiceFieldType extends AbstractFieldTypeMaker
                 'field_type_identifier' => $fieldTypeInfo->getIdentifier(),
                 'field_type_definition' => $fieldTypeInfo->getServiceDefinitionId(),
                 'field_type_definition_class' => $typeClass->getFullName(),
-                'choice_provider_class' => $choiceProviderClass->getFullName()
+                'choice_provider_class' => $choiceProviderClass->getFullName(),
             ]
         );
     }

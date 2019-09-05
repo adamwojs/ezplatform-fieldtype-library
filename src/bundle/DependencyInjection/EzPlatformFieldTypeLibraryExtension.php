@@ -22,6 +22,7 @@ final class EzPlatformFieldTypeLibraryExtension extends Extension implements Pre
         );
 
         $loader->load('services.yaml');
+        $loader->load('services_rest.yaml');
     }
 
     public function prepend(ContainerBuilder $container): void

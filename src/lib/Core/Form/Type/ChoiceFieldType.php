@@ -4,42 +4,59 @@ declare(strict_types=1);
 
 namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type;
 
-use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceCriteria;
+use AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\Value;
+use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\ChoiceLoader\ChoiceFieldTypeChoiceLoader;
 use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\DataTransformer\ChoiceFieldTypeTransformer;
+use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\ChoiceFieldType\AutoCompleteOptions;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ChoiceFieldType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider $choiceProvider */
-        $choiceProvider = $options['choice_provider'];
+        /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider $provider */
+        $provider = $options['auto_complete']->getChoiceProvider();
+        $loader = new ChoiceFieldTypeChoiceLoader($provider);
 
-        $builder->add('selection', $options['choice_widget'], [
+        $builder->add('selection', AutoCompleteChoiceType::class, [
             'label' => false,
             'multiple' => $options['multiple'],
-            'choice_loader' => new CallbackChoiceLoader(function () use ($choiceProvider) {
-                return $choiceProvider->getChoices(new ChoiceCriteria());
-            }),
-            'choice_label' => function ($choice) use ($choiceProvider) {
-                return $choiceProvider->getLabelForChoice($choice);
+            'choice_loader' => $loader,
+            'choice_label' => function ($choice) use ($provider) {
+                return $provider->getLabelForChoice($choice);
             },
-            'choice_value' => function ($choice) use ($choiceProvider) {
-                return $choice ? $choiceProvider->getValueForChoice($choice) : null;
+            'choice_value' => function ($choice) use ($provider) {
+                return $choice ? $provider->getValueForChoice($choice) : null;
             },
+            'attr' => [
+                'data-autocomplete-provider' => $options['auto_complete']->getIdentifier(),
+            ],
         ]);
 
         $builder->addModelTransformer(new ChoiceFieldTypeTransformer($options['multiple']));
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($loader) {
+                $data = $event->getData();
+                if ($data instanceof Value) {
+                    $loader->setSelection($data->getSelection());
+                }
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('choice_widget', ChoiceType::class);
-        $resolver->setRequired('multiple');
-        $resolver->setRequired('choice_provider');
+        $resolver->setDefaults([
+            'multiple' => false,
+        ]);
+
+        $resolver->setRequired('auto_complete');
+        $resolver->setAllowedTypes('auto_complete', AutoCompleteOptions::class);
     }
 }

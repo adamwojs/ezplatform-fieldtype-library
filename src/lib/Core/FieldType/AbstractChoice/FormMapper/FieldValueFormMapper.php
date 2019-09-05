@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\FormMapper;
 
 use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider;
-use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\AutoCompleteChoiceType;
 use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\ChoiceFieldType;
+use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\ChoiceFieldType\AutoCompleteOptions;
 use EzSystems\RepositoryForms\Data\Content\FieldData;
 use EzSystems\RepositoryForms\FieldType\FieldValueFormMapperInterface;
 use Symfony\Component\Form\FormInterface;
@@ -16,13 +16,9 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
     /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider */
     private $choiceProvider;
 
-    /** @var string|null */
-    private $choiceWidget;
-
-    public function __construct(ChoiceProvider $choiceProvider, ?string $choiceWidget = null)
+    public function __construct(ChoiceProvider $choiceProvider)
     {
         $this->choiceProvider = $choiceProvider;
-        $this->choiceWidget = $choiceWidget ?? AutoCompleteChoiceType::class;
     }
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data): void
@@ -33,8 +29,10 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
             'required' => $definition->isRequired,
             'label' => $definition->getName(),
             'multiple' => $definition->fieldSettings['isMultiple'],
-            'choice_provider' => $this->choiceProvider,
-            'choice_widget' => $this->choiceWidget,
+            'auto_complete' => new AutoCompleteOptions(
+                $definition->fieldTypeIdentifier,
+                $this->choiceProvider,
+            ),
         ]);
     }
 }
