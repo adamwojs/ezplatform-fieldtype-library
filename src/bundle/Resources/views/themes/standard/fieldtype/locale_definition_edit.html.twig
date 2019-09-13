@@ -1,5 +1,8 @@
 {% block ezcurrency_field_definition_edit %}
-    <div class="ezlocale-settings is-multiple{% if group_class is not empty %} {{ group_class }}{% endif %}">
-        {{- form_row(form.isMultiple, {'label_attr': {'class': 'checkbox-inline ez-label'}}) -}}
+    <div class="ezlocale-settings min-selection-length{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_row(form.minSelectionLength) -}}
+    </div>
+    <div class="ezlocale-settings max-selection-length{% if group_class is not empty %} {{ group_class }}{% endif %}">
+        {{- form_row(form.maxSelectionLength) -}}
     </div>
 {% endblock %}

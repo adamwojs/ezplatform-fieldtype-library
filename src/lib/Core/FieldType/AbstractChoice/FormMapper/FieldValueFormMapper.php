@@ -25,10 +25,12 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
     {
         $definition = $data->fieldDefinition;
 
+        $selectionLength = $definition->validatorConfiguration['SelectionLengthValidator'];
+
         $fieldForm->add('value', ChoiceFieldType::class, [
             'required' => $definition->isRequired,
             'label' => $definition->getName(),
-            'multiple' => $definition->fieldSettings['isMultiple'],
+            'multiple' => $selectionLength['minSelectionLength'] > 1 || $selectionLength['maxSelectionLength'] > 0,
             'auto_complete' => new AutoCompleteOptions(
                 $definition->fieldTypeIdentifier,
                 $this->choiceProvider,

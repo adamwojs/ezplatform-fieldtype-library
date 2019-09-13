@@ -48,6 +48,16 @@ final class ChoiceFieldType extends AbstractType
                 }
             }
         );
+
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($loader) {
+                $data = $event->getData();
+                if (isset($data['selection'])) {
+                    $loader->setSelection($data['selection']);
+                }
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

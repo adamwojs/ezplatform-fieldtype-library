@@ -6,7 +6,7 @@ namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\Form
 
 use EzSystems\RepositoryForms\Data\FieldDefinitionData;
 use EzSystems\RepositoryForms\FieldType\FieldDefinitionFormMapperInterface;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormInterface;
 
 final class FieldDefinitionFormMapper implements FieldDefinitionFormMapperInterface
@@ -15,9 +15,15 @@ final class FieldDefinitionFormMapper implements FieldDefinitionFormMapperInterf
     {
         $isTranslation = $data->contentTypeData->languageCode !== $data->contentTypeData->mainLanguageCode;
 
-        $fieldDefinitionForm->add('isMultiple', CheckboxType::class, [
+        $fieldDefinitionForm->add('minSelectionLength', IntegerType::class, [
             'required' => false,
-            'property_path' => 'fieldSettings[isMultiple]',
+            'property_path' => 'validatorConfiguration[SelectionLengthValidator][minSelectionLength]',
+            'disabled' => $isTranslation,
+        ]);
+
+        $fieldDefinitionForm->add('maxSelectionLength', IntegerType::class, [
+            'required' => false,
+            'property_path' => 'validatorConfiguration[SelectionLengthValidator][maxSelectionLength]',
             'disabled' => $isTranslation,
         ]);
     }

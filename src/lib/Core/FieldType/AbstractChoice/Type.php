@@ -15,10 +15,16 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 abstract class Type extends FieldType
 {
-    protected $settingsSchema = [
-        'isMultiple' => [
-            'type' => 'bool',
-            'default' => false,
+    protected $validatorConfigurationSchema = [
+        'SelectionLengthValidator' => [
+            'minSelectionLength' => [
+                'type' => 'int',
+                'default' => 1,
+            ],
+            'maxSelectionLength' => [
+                'type' => 'int',
+                'default' => 1,
+            ],
         ],
     ];
 
@@ -93,23 +99,50 @@ abstract class Type extends FieldType
             return $validationErrors;
         }
 
-        $fieldSettings = $fieldDefinition->getFieldSettings();
+        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
+        $selectionLengthConstraint = $validatorConfiguration['SelectionLengthValidator'] ?? [];
 
-        $isSingleChoiceFieldType = !isset($fieldSettings['isMultiple']) || $fieldSettings['isMultiple'] === false;
-        if ($isSingleChoiceFieldType && count($value->getSelection()) > 1) {
-            $validationErrors[] = new ValidationError(
-                'Field definition does not allow multiple options to be selected.',
-                null,
-                [],
-                'selection'
-            );
+        $minSelectionLength = $selectionLengthConstraint['minSelectionLength'] ?? null;
+        $maxSelectionLength = $selectionLengthConstraint['maxSelectionLength'] ?? null;
+
+        if ($minSelectionLength > 0 || $maxSelectionLength > 0) {
+            $selectionLength = count($value->getSelection());
+
+            if ($minSelectionLength === $maxSelectionLength && $selectionLength !== $minSelectionLength) {
+                $validationErrors[] = new ValidationError(
+                    '%count% option(s) needs to be selected.',
+                    null,
+                    [
+                        '%count%' => $minSelectionLength,
+                    ],
+                    'selection'
+                );
+            } elseif ($minSelectionLength > 0 && count($value->getSelection()) < $minSelectionLength) {
+                $validationErrors[] = new ValidationError(
+                    'At least %count% option(s) needs to be selected.',
+                    null,
+                    [
+                        '%count%' => $minSelectionLength,
+                    ],
+                    'selection'
+                );
+            } elseif ($maxSelectionLength > 0 && count($value->getSelection()) > $maxSelectionLength) {
+                $validationErrors[] = new ValidationError(
+                    'No more then %count% options need to be selected.',
+                    null,
+                    [
+                        '%count%' => $maxSelectionLength,
+                    ],
+                    'selection'
+                );
+            }
         }
 
         $availableChoices = $this->choiceProvider->getChoiceList(new ChoiceCriteria())->toArray();
         foreach ($value->getSelection() as $index => $choice) {
             if (!in_array($choice, $availableChoices)) {
                 $validationErrors[] = new ValidationError(
-                    'Choice with index %index% does not exist in the field definition.',
+                    'Choice with index %index% does not exist.',
                     null,
                     [
                         '%index%' => $index,
@@ -122,35 +155,49 @@ abstract class Type extends FieldType
         return $validationErrors;
     }
 
-    public function validateFieldSettings($fieldSettings): array
+    public function validateValidatorConfiguration($validatorConfiguration): array
     {
         $validationErrors = [];
 
-        foreach ($fieldSettings as $settingKey => $settingValue) {
-            switch ($settingKey) {
-                case 'isMultiple':
-                    if (!is_bool($settingValue)) {
+        foreach ($validatorConfiguration as $validatorIdentifier => $constraints) {
+            if ($validatorIdentifier !== 'SelectionLengthValidator') {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    [
+                        '%validator%' => $validatorIdentifier,
+                    ],
+                    "[$validatorIdentifier]"
+                );
+
+                continue;
+            }
+
+            foreach ($constraints as $name => $value) {
+                switch ($name) {
+                    case 'minSelectionLength':
+                    case 'maxSelectionLength':
+                        if ($value !== null && !is_int($value)) {
+                            $validationErrors[] = new ValidationError(
+                                "Validator parameter '%parameter%' value must be of integer type",
+                                null,
+                                [
+                                    '%parameter%' => $name,
+                                ],
+                                "[$validatorIdentifier][$name]"
+                            );
+                        }
+                        break;
+                    default:
                         $validationErrors[] = new ValidationError(
-                            "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
+                            "Validator parameter '%parameter%' is unknown",
                             null,
                             [
-                                '%fieldType%' => $this->getFieldTypeIdentifier(),
-                                '%setting%' => $settingKey,
-                                '%type%' => 'bool',
+                                '%parameter%' => $name,
                             ],
-                            "[$settingKey]"
+                            "[$validatorIdentifier][$name]"
                         );
-                    }
-                    break;
-                default:
-                    $validationErrors[] = new ValidationError(
-                        "Setting '%setting%' is unknown",
-                        null,
-                        [
-                            '%setting%' => $settingKey,
-                        ],
-                        "[$settingKey]"
-                    );
+                }
             }
         }
 

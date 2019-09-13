@@ -34,17 +34,19 @@ final class ChoiceConverter implements Converter
 
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef): void
     {
-        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+        $selectionLengthValidator = $fieldDef->fieldTypeConstraints->validators['SelectionLengthValidator'];
 
-        if (isset($fieldSettings['isMultiple'])) {
-            $storageDef->dataInt1 = (int)$fieldSettings['isMultiple'];
-        }
+        $storageDef->dataInt1 = $selectionLengthValidator['minSelectionLength'];
+        $storageDef->dataInt2 = $selectionLengthValidator['maxSelectionLength'];
     }
 
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef): void
     {
-        $fieldDef->fieldTypeConstraints->fieldSettings = [
-            'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
+        $fieldDef->fieldTypeConstraints->validators = [
+            'SelectionLengthValidator' => [
+                'minSelectionLength' => $storageDef->dataInt1,
+                'maxSelectionLength' => $storageDef->dataInt2,
+            ],
         ];
     }
 
