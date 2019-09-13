@@ -7,6 +7,7 @@ namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractChoice\Form
 use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider;
 use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\ChoiceFieldType;
 use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\ChoiceFieldType\AutoCompleteOptions;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use EzSystems\RepositoryForms\Data\Content\FieldData;
 use EzSystems\RepositoryForms\FieldType\FieldValueFormMapperInterface;
 use Symfony\Component\Form\FormInterface;
@@ -25,16 +26,22 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
     {
         $definition = $data->fieldDefinition;
 
-        $selectionLength = $definition->validatorConfiguration['SelectionLengthValidator'];
-
         $fieldForm->add('value', ChoiceFieldType::class, [
             'required' => $definition->isRequired,
             'label' => $definition->getName(),
-            'multiple' => $selectionLength['minSelectionLength'] > 1 || $selectionLength['maxSelectionLength'] > 0,
+            'multiple' => $this->isMultipleSelectionAllowed($definition),
             'auto_complete' => new AutoCompleteOptions(
                 $definition->fieldTypeIdentifier,
                 $this->choiceProvider,
             ),
         ]);
+    }
+
+    private function isMultipleSelectionAllowed(FieldDefinition $fieldDefinition): bool
+    {
+        $validator = $fieldDefinition->validatorConfiguration['SelectionLengthValidator'];
+
+        return $validator['minSelectionLength'] !== 1
+            && $validator['maxSelectionLength'] !== 1;
     }
 }
