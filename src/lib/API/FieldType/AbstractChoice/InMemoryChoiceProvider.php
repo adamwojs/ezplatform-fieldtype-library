@@ -20,15 +20,16 @@ final class InMemoryChoiceProvider implements ChoiceProvider
         }
     }
 
-    public function getChoices(ChoiceCriteria $criteria): array
+    public function getChoiceList(ChoiceCriteria $criteria, ?int $offset = null, ?int $limit = null): ChoiceList
     {
-        if (!$criteria->hasValues()) {
-            return $this->choices;
+        $choices = $this->filterChoices($criteria);
+        $totalCount = count($choices);
+
+        if ($offset !== null) {
+            $choices = array_slice($choices, $offset, $limit);
         }
 
-        return array_filter($this->choices, function ($value) use ($criteria) {
-            return in_array($value, $criteria->getValues());
-        });
+        return new ChoiceList($choices, $totalCount);
     }
 
     public function getValueForChoice($choice): string
@@ -43,5 +44,45 @@ final class InMemoryChoiceProvider implements ChoiceProvider
         Assert::isInstanceOf($choice, Choice::class);
 
         return $choice->getLabel();
+    }
+
+    private function filterChoices(ChoiceCriteria $criteria): array
+    {
+        if (!$criteria->hasValues() && $criteria->getSearchTerm() === null) {
+            return $this->choices;
+        }
+
+        $choices = [];
+
+        $pattern = $this->getSearchTermPattern($criteria);
+        foreach ($this->choices as $choice) {
+            if ($this->isMatchCriteria($criteria, $choice, $pattern)) {
+                $choices[] = $choice;
+            }
+        }
+
+        return $choices;
+    }
+
+    private function isMatchCriteria(ChoiceCriteria $criteria, Choice $choice, ?string $pattern): bool
+    {
+        if ($criteria->hasValues() && !in_array($choice->getValue(), $criteria->getValues())) {
+            return false;
+        }
+
+        if ($pattern !== null && preg_match($pattern, $choice->getLabel()) === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function getSearchTermPattern(ChoiceCriteria $criteria): ?string
+    {
+        if ($criteria->getSearchTerm() !== null) {
+            return '/^.*' . preg_quote($criteria->getSearchTerm()) . '.*/i';
+        }
+
+        return null;
     }
 }

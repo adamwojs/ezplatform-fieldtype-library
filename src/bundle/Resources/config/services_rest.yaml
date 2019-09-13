@@ -1,0 +1,12 @@
+services:
+    AdamWojs\EzPlatformFieldTypeLibraryBundle\Controller\ChoiceAutoCompleteController:
+        parent: ezpublish_rest.controller.base
+        arguments:
+            $choiceProviderRegistry: '@AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProviderRegistry'
+        tags:
+            - { name: controller.service_arguments }
+
+    AdamWojs\EzPlatformFieldTypeLibrary\Core\REST\ValueObjectVisitor\ChoiceListVisitor:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: AdamWojs\EzPlatformFieldTypeLibrary\Core\REST\Value\ChoiceList }

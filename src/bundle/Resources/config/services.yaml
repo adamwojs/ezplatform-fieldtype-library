@@ -16,6 +16,10 @@ services:
     AdamWojs\EzPlatformFieldTypeLibrary\Core\MVC\Symfony\Templating\FallbackFieldBlockRenderer:
         decorates: ezpublish.templating.field_block_renderer.twig
 
+    AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProviderRegistry:
+        arguments:
+            $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
+
     ### Maker
 
     AdamWojs\EzPlatformFieldTypeLibraryBundle\Maker\MakeChoiceFieldType:

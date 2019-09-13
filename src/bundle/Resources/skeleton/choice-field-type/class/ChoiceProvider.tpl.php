@@ -6,12 +6,13 @@ namespace <?= $namespace; ?>;
 
 use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider as ChoiceProviderInterface;
 use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceCriteria;
+use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceList;
 
 final class ChoiceProvider implements ChoiceProviderInterface
 {
-    public function getChoices(ChoiceCriteria $criteria): array
+    public function getChoices(ChoiceCriteria $criteria, ?int $offset = null, ?int $limit = null): ChoiceList
     {
-        return [];
+        return new ChoiceList();
     }
 
     public function getValueForChoice($choice): string

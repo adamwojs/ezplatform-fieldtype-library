@@ -1,0 +1,4 @@
+ezplatform_choice_field_type_autocomplete:
+    path: /fieldtypes/{identifier}/autocomplete
+    methods: [GET]
+    controller: AdamWojs\EzPlatformFieldTypeLibraryBundle\Controller\ChoiceAutoCompleteController::getChoicesAction
