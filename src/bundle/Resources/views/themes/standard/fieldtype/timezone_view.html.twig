@@ -1,5 +1,5 @@
 {% block eztimezone_field %}
-    {% spaceless %}
-        {{ field.value.getSelection()|map((choice) => choice.getLabel())|join(', ') }}
-    {% endspaceless %}
+{% apply spaceless %}
+    {{ field.value.getSelection()|map((choice) => choice.getLabel())|join(', ') }}
+{% endapply %}
 {% endblock %}

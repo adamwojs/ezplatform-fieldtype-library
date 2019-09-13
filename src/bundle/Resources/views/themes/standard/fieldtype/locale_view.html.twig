@@ -1,5 +1,5 @@
 {% block ezlocale_field %}
-{% spaceless %}
+{% apply spaceless %}
     {{ field.value.getSelection()|map((choice) => choice.getLabel())|join(', ') }}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
