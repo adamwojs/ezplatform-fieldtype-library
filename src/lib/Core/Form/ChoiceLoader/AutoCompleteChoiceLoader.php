@@ -13,7 +13,7 @@ use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
 /**
  * @internal
  */
-final class ChoiceFieldTypeChoiceLoader implements ChoiceLoaderInterface
+final class AutoCompleteChoiceLoader implements ChoiceLoaderInterface
 {
     /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceProvider */
     private $choiceProvider;
@@ -45,12 +45,15 @@ final class ChoiceFieldTypeChoiceLoader implements ChoiceLoaderInterface
 
     public function loadValuesForChoices(array $choices, $value = null): array
     {
-        $values = [];
+        // Optimize
+        $choices = array_filter($choices);
+        if (empty($choices)) {
+            return [];
+        }
 
+        $values = [];
         foreach ($choices as $key => $choice) {
-            if ($choice !== null) {
-                $values[$key] = $this->choiceProvider->getValueForChoice($choice);
-            }
+            $values[$key] = $this->choiceProvider->getValueForChoice($choice);
         }
 
         return $values;
@@ -58,6 +61,8 @@ final class ChoiceFieldTypeChoiceLoader implements ChoiceLoaderInterface
 
     public function setSelection(array $selection): void
     {
-        $this->selection = $selection;
+        $this->selection = $this->choiceProvider->getChoiceList(
+            new ChoiceCriteria($selection)
+        )->toArray();
     }
 }

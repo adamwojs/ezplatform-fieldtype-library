@@ -1,3 +1,7 @@
 {% block auto_complete_choice_widget %}
+    {% set attr = attr|merge({
+        'data-autocomplete-provider': auto_complete.identifier
+    }) %}
+
     {{ block('choice_widget') }}
 {% endblock %}

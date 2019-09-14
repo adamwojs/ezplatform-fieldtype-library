@@ -24,14 +24,14 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data): void
     {
-        $definition = $data->fieldDefinition;
+        $fieldDefinition = $data->fieldDefinition;
 
         $fieldForm->add('value', ChoiceFieldType::class, [
-            'required' => $definition->isRequired,
-            'label' => $definition->getName(),
-            'multiple' => $this->isMultipleSelectionAllowed($definition),
+            'label' => $fieldDefinition->getName(),
+            'required' => $fieldDefinition->isRequired,
+            'multiple' => $this->isMultipleSelectionAllowed($fieldDefinition),
             'auto_complete' => new AutoCompleteOptions(
-                $definition->fieldTypeIdentifier,
+                $fieldDefinition->fieldTypeIdentifier,
                 $this->choiceProvider,
             ),
         ]);
@@ -42,6 +42,6 @@ final class FieldValueFormMapper implements FieldValueFormMapperInterface
         $validator = $fieldDefinition->validatorConfiguration['SelectionLengthValidator'];
 
         return $validator['minSelectionLength'] !== 1
-            && $validator['maxSelectionLength'] !== 1;
+            || $validator['maxSelectionLength'] !== 1;
     }
 }
