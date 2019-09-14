@@ -53,8 +53,14 @@ final class ChoiceFieldType extends AbstractType
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($loader) {
                 $data = $event->getData();
+
                 if (isset($data['selection'])) {
-                    $loader->setSelection($data['selection']);
+                    $selection = $data['selection'];
+                    if (!is_array($selection)) {
+                        $selection = [$selection];
+                    }
+
+                    $loader->setSelection($selection);
                 }
             }
         );
