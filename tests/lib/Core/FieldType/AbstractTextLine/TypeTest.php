@@ -35,7 +35,7 @@ class TypeTest extends FieldTypeTest
             [
                 $this->createMock(ValueObject::class),
                 InvalidArgumentException::class,
-            ]
+            ],
         ];
     }
 
