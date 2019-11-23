@@ -138,17 +138,23 @@ abstract class Type extends FieldType
             }
         }
 
-        $availableChoices = $this->choiceProvider->getChoiceList(new ChoiceCriteria())->toArray();
-        foreach ($value->getSelection() as $index => $choice) {
-            if (!in_array($choice, $availableChoices)) {
-                $validationErrors[] = new ValidationError(
-                    'Choice with index %index% does not exist.',
-                    null,
-                    [
-                        '%index%' => $index,
-                    ],
-                    'selection'
-                );
+        $selectedChoices = $value->getSelection();
+        $availableChoices = $this->choiceProvider->getChoiceList(
+            new ChoiceCriteria($selectedChoices)
+        )->toArray();
+
+        if (count($selectedChoices) !== count($availableChoices)) {
+            foreach ($selectedChoices as $index => $choice) {
+                if (!in_array($choice, $availableChoices)) {
+                    $validationErrors[] = new ValidationError(
+                        'Choice with index %index% does not exist.',
+                        null,
+                        [
+                            '%index%' => $index,
+                        ],
+                        'selection'
+                    );
+                }
             }
         }
 
