@@ -18,7 +18,7 @@ class TypeTest extends FieldTypeTest
     private const FIELD_TYPE_IDENTIFIER = 'custom_text_line';
 
     /** @var \AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\TextLineFormat */
-    private $format;
+    protected $format;
 
     protected function setUp(): void
     {
@@ -184,7 +184,7 @@ class TypeTest extends FieldTypeTest
 
     protected function createFieldTypeUnderTest(): Type
     {
-        return new CustomTextLineType(self::FIELD_TYPE_IDENTIFIER, $this->format);
+        return new TypeStub(self::FIELD_TYPE_IDENTIFIER, $this->format);
     }
 
     protected function getValidatorConfigurationSchemaExpectation(): array

@@ -7,7 +7,7 @@ namespace AdamWojs\EzPlatformFieldTypeLibrary\Tests\Core\FieldType\AbstractTextL
 use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\TextLineFormat;
 use AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractTextLine\Type as AbstractTextLineType;
 
-final class CustomTextLineType extends AbstractTextLineType
+final class TypeStub extends AbstractTextLineType
 {
     /** @var string */
     private $identifier;
