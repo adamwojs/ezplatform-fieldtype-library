@@ -31,7 +31,7 @@ abstract class Type extends FieldType
 
     public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
-        return $value->getText();
+        return (string)$value->getText();
     }
 
     public function getEmptyValue(): Value
