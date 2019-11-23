@@ -33,5 +33,25 @@ final class EzPlatformFieldTypeLibraryExtension extends Extension implements Pre
         foreach (Yaml::parseFile($configFile) as $name => $config) {
             $container->prependExtensionConfig($name, $config);
         }
+
+        $this->prependJMSTranslation($container);
+    }
+
+    private function prependJMSTranslation(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('jms_translation', [
+            'configs' => [
+                'ezplatform_fieldtype_library' => [
+                    'dirs' => [
+                        __DIR__ . '/../../',
+                    ],
+                    'output_dir' => __DIR__ . '/../Resources/translations/',
+                    'output_format' => 'xliff',
+                    'excluded_names' => ['*.module.js'],
+                    'excluded_dirs' => ['node_modules', 'vendors'],
+                    'extractors' => [],
+                ],
+            ],
+        ]);
     }
 }

@@ -6,8 +6,10 @@ namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\MaskedTextLine;
 
 use AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractTextLine\Type as AbstractType;
 use eZ\Publish\Core\FieldType\ValidationError;
+use JMS\TranslationBundle\Model\Message;
+use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 
-final class Type extends AbstractType
+final class Type extends AbstractType implements TranslationContainerInterface
 {
     protected $settingsSchema = [
         'mask' => [
@@ -42,5 +44,12 @@ final class Type extends AbstractType
         }
 
         return $validationErrors;
+    }
+
+    public static function getTranslationMessages(): array
+    {
+        return [
+            (new Message('ezmaskedtextline.name', 'fieldtypes'))->setDesc('Masked Text Line'),
+        ];
     }
 }

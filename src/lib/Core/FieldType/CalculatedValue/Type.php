@@ -9,8 +9,10 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use JMS\TranslationBundle\Model\Message;
+use JMS\TranslationBundle\Translation\TranslationContainerInterface;
 
-final class Type extends FieldType
+final class Type extends FieldType implements TranslationContainerInterface
 {
     protected $settingsSchema = [
         'expression' => [
@@ -84,5 +86,12 @@ final class Type extends FieldType
     {
         // Value is self-contained and strong typed
         return;
+    }
+
+    public static function getTranslationMessages(): array
+    {
+        return [
+            (new Message('ezcalcval.name', 'fieldtypes'))->setDesc('Calculated value'),
+        ];
     }
 }

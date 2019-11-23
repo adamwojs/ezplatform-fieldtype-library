@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file source-language="en" target-language="en" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="10d1d1f6a46a0165eb283e105fc7bd4a8a47574b" resname="ezcalcval.name">
+        <source>Calculated value</source>
+        <target state="new">Calculated value</target>
+        <note>key: ezcalcval.name</note>
+      </trans-unit>
+      <trans-unit id="caf313723e17cb2803e3144dff68e3cb4d455159" resname="ezcurrency.name">
+        <source>Currency</source>
+        <target state="new">Currency</target>
+        <note>key: ezcurrency.name</note>
+      </trans-unit>
+      <trans-unit id="9d7d17c64f82e27e934f761c2f367238b79f57b5" resname="ezlanguage.name">
+        <source>Language</source>
+        <target state="new">Language</target>
+        <note>key: ezlanguage.name</note>
+      </trans-unit>
+      <trans-unit id="5dc035582799566213f66682e03384e0a3315e86" resname="ezlocale.name">
+        <source>Locale</source>
+        <target state="new">Locale</target>
+        <note>key: ezlocale.name</note>
+      </trans-unit>
+      <trans-unit id="5a676c7361be77a469f573f77eeab9895fd7684a" resname="ezmaskedtextline.name">
+        <source>Masked Text Line</source>
+        <target state="new">Masked Text Line</target>
+        <note>key: ezmaskedtextline.name</note>
+      </trans-unit>
+      <trans-unit id="1d0faea338d311f6aaa5d4325d7d7b5e1639263d" resname="eztimezone.name">
+        <source>Timezone</source>
+        <target state="new">Timezone</target>
+        <note>key: eztimezone.name</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
