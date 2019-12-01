@@ -10,7 +10,7 @@ use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice\ChoiceList;
 
 final class ChoiceProvider implements ChoiceProviderInterface
 {
-    public function getChoices(ChoiceCriteria $criteria, ?int $offset = null, ?int $limit = null): ChoiceList
+    public function getChoiceList(ChoiceCriteria $criteria, ?int $offset = null, ?int $limit = null): ChoiceList
     {
         return new ChoiceList();
     }
