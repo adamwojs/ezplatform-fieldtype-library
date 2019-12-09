@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\CalculatedValue\FormMapper;
 
-use EzSystems\RepositoryForms\Data\Content\FieldData;
-use EzSystems\RepositoryForms\FieldType\FieldValueFormMapperInterface;
+use EzSystems\EzPlatformContentForms\Data\Content\FieldData;
+use EzSystems\EzPlatformContentForms\FieldType\FieldValueFormMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 

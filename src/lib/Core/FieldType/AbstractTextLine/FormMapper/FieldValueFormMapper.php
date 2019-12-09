@@ -6,8 +6,8 @@ namespace AdamWojs\EzPlatformFieldTypeLibrary\Core\FieldType\AbstractTextLine\Fo
 
 use AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractTextLine\TextLineFormat;
 use AdamWojs\EzPlatformFieldTypeLibrary\Core\Form\Type\TextLineFieldType;
-use EzSystems\RepositoryForms\Data\Content\FieldData;
-use EzSystems\RepositoryForms\FieldType\FieldValueFormMapperInterface;
+use EzSystems\EzPlatformContentForms\Data\Content\FieldData;
+use EzSystems\EzPlatformContentForms\FieldType\FieldValueFormMapperInterface;
 use Symfony\Component\Form\FormInterface;
 
 final class FieldValueFormMapper implements FieldValueFormMapperInterface
