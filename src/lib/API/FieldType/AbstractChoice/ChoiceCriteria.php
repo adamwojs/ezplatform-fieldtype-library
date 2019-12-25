@@ -6,7 +6,7 @@ namespace AdamWojs\EzPlatformFieldTypeLibrary\API\FieldType\AbstractChoice;
 
 final class ChoiceCriteria
 {
-    /** @var array|null */
+    /** @var string[]|null */
     private $values;
 
     /** @var string|null */

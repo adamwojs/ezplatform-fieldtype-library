@@ -22,12 +22,29 @@ final class AutoCompleteChoiceType extends AbstractType
     {
         $loader = $options['choice_loader'];
 
-        $listener = static function (FormEvent $event) use ($loader) {
-            $loader->setSelection((array)$event->getData());
-        };
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            static function (FormEvent $event) use ($loader, $options) {
+                $data = $event->getData();
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, $listener);
-        $builder->addEventListener(FormEvents::POST_SUBMIT, $listener);
+                if ($data === null) {
+                    return;
+                }
+
+                if ($options['multiple']) {
+                    $loader->setPreSelection((array) $data);
+                } else {
+                    $loader->setPreSelection([$data]);
+                }
+            }
+        );
+
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            static function (FormEvent $event) use ($loader) {
+                $loader->setPostSelection((array)$event->getData());
+            }
+        );
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void

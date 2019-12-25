@@ -140,7 +140,7 @@ abstract class Type extends FieldType
 
         $selectedChoices = $value->getSelection();
         $availableChoices = $this->choiceProvider->getChoiceList(
-            new ChoiceCriteria($selectedChoices)
+            new ChoiceCriteria(array_map([$this->choiceProvider, 'getValueForChoice'], $selectedChoices))
         )->toArray();
 
         if (count($selectedChoices) !== count($availableChoices)) {

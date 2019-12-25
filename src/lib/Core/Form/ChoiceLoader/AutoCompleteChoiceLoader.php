@@ -59,7 +59,12 @@ final class AutoCompleteChoiceLoader implements ChoiceLoaderInterface
         return $values;
     }
 
-    public function setSelection(array $selection): void
+    public function setPreSelection(array $selection): void
+    {
+        $this->selection = $selection;
+    }
+
+    public function setPostSelection(array $selection): void
     {
         $this->selection = $this->choiceProvider->getChoiceList(
             new ChoiceCriteria($selection)
