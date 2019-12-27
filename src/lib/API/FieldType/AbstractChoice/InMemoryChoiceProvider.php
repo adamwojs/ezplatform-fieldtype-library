@@ -16,7 +16,7 @@ final class InMemoryChoiceProvider implements ChoiceProvider
     {
         $this->choices = [];
         foreach ($choices as $value => $label) {
-            $this->choices[$value] = new Choice((string)$value, $label);
+            $this->choices[] = new Choice((string)$value, $label);
         }
     }
 
