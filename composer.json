@@ -11,6 +11,7 @@
     "php": "^7.3",
     "ezsystems/ezpublish-kernel": "dev-master",
     "ezsystems/ezplatform-admin-ui": "dev-master",
+    "ezsystems/ezplatform-rest": "dev-master",
     "doctrine/orm": "^2.6",
     "symfony/maker-bundle": "^1.12",
     "jms/translation-bundle": "^1.4"
